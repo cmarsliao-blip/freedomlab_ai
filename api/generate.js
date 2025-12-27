@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const API_KEY = "AIzaSyCVcCRcpsvIJzquv5GixKgAiH0pBflMLhA";
+  const API_KEY = "AIzaSyCM6KQ_Bllx6bWcBHYLkdbF1RaDtcg92gM";
   if (!API_KEY) {
     return res.status(500).json({ error: "API Key 未設定" });
   }
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
   try {
     const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `
       你是一位精通「知識變現」與「被動收入」的商業顧問。
       使用者的職業是：「${job}」。
