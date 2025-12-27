@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const API_KEY = process.env.GOOGLE_API_KEY;
+  const API_KEY = "AIzaSyCVcCRcpsvIJzquv5GixKgAiH0pBflMLhA";
   if (!API_KEY) {
     return res.status(500).json({ error: "API Key 未設定" });
   }
