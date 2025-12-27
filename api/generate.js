@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
   try {
     const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `
       你是一位精通「知識變現」與「被動收入」的商業顧問。
       使用者的職業是：「${job}」。
