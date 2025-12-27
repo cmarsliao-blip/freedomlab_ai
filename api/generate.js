@@ -1,13 +1,28 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req, res) {
+  // 設定 CORS 允許跨網域 (重要！讓網頁能呼叫 API)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  // 處理預檢請求 (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const API_KEY = process.env.GOOGLE_API_KEY; // 這裡會自動去讀取 Vercel 的設定
+  const API_KEY = process.env.GOOGLE_API_KEY;
   if (!API_KEY) {
-    return res.status(500).json({ error: "伺服器端 API Key 未設定" });
+    return res.status(500).json({ error: "API Key 未設定" });
   }
 
   const { job } = req.body;
@@ -27,11 +42,12 @@ export default async function handler(req, res) {
     `;
 
     const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    const response = await result.response;
+    const text = response.text();
 
-    return res.status(200).json({ result: responseText });
+    return res.status(200).json({ result: text });
   } catch (error) {
-    console.error("API Error:", error);
-    return res.status(500).json({ error: 'AI 生成失敗' });
+    console.error("API Error Details:", error);
+    return res.status(500).json({ error: 'AI 生成失敗: ' + error.message });
   }
 }
